@@ -12,6 +12,11 @@
     <title>JSP Page</title>
   </head>
   <body>
+        <% 
+      if(session.getAttribute("userName").equals("")){
+        %> <jsp:forward page ="index.jsp"/> <%
+      }
+    %>
     <h1>Account Settings</h1>
   </body>
 </html>

@@ -195,6 +195,15 @@
     </style>
   </head>
   <body>
+    <% 
+        try {
+          if (!session.getAttribute("userType").equals("faculty")) {
+      %> <jsp:forward page ="index.jsp"/> <%
+      }
+    } catch (Exception ex) {
+      %> <jsp:forward page ="index.jsp"/> <%
+}
+    %>
     <div class="title">
       Course Manager
     </div>
@@ -207,7 +216,7 @@
     <div class="navbarright" style="color: white;">
       <div class="navList">
         <a class="navListLink" href="accountSettings.jsp">Account Settings</a>
-        <a class="navListLink" href="index.jsp">Logout</a>
+        <a class="navListLink" href="logout.jsp">Logout</a>
       </div>
     </div>
     <div class="content">

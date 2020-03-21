@@ -13,28 +13,29 @@
   </head>
   <body>
     <%
-      String email = request.getParameter("email");
-      String password = request.getParameter("psw");
-      String userType;
-      String sql = "select userUserName, userPassword from user where userUserName = '"
-              + email + "' and userPassword = '" + password + "'";
-      String sql2 = "select userType from user where userUserName = '"
-              + email + "' and userPassword = '" + password + "'";
-      DBConnect dbConnect = new DBConnect();
-      String validation = dbConnect.isValid(sql);
-      out.println("<h2>" + validation + "</h2>");
-      if (!validation.equals("Login Failed")) {
-        String uType = dbConnect.getUserType(sql2);
-        if (!uType.equals("NONE")) {
-          if (uType.equals("faculty")) {
-    %> <jsp:forward page ="fhomeLoggedIn.jsp"/> <%
-    } else if (uType.equals("admin")) {
-    %> <jsp:forward page ="ahomeLoggedIn.jsp"/> <%
-} else if (uType.equals("student")) {
-    %> <jsp:forward page ="shomeLoggedIn.jsp"/> <%
-      }
-    }
-  }
+        String courseTerm = request.getParameter("courseterm");
+        String courseName = request.getParameter("coursename");
+        String courseCategory = request.getParameter("coursecategory");
+        String courseNumber = request.getParameter("coursenumber");
+        String courseSection = request.getParameter("coursesection");
+        String[] courseDays = request.getParameterValues("coursedays");
+        String courseStart = request.getParameter("coursestarttime");
+        String courseEnd = request.getParameter("courseendtime");
+
+        String cDays = "";
+        for (int i = 0; i < courseDays.length; i++) {
+          cDays = cDays + courseDays[i];
+        }
+        String sql = "insert into course values (0, '" + courseTerm + "', "
+                + "'" + courseName + "', '" + courseCategory + "', '" + courseNumber + "', '" + courseSection + "', '" + cDays
+                + "', '" + courseStart + "', '" + courseEnd + "')";
+        try {
+          DBConnect dbConnect = new DBConnect();
+          dbConnect.insertData(sql);
+          %> <jsp:forward page ="registerCourse.jsp"/> <%
+        } catch (Exception ex) {
+          out.print(ex);
+        }
     %>.
     <h1>Hello World!</h1>
   </body>

@@ -12,6 +12,11 @@
     <title>JSP Page</title>
   </head>
   <body>
+    <%
+      session.setAttribute("userType", "");
+      session.setAttribute("userName", "");
+    %>
+    <jsp:forward page ="index.jsp"/>
     <h1>Logged Out!</h1>
   </body>
 </html>

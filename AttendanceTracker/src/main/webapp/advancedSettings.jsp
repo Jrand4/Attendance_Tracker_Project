@@ -117,6 +117,15 @@
       </style>
     </head>
     <body>
+          <% 
+        try {
+          if (!session.getAttribute("userType").equals("admin")) {
+      %> <jsp:forward page ="index.jsp"/> <%
+      }
+    } catch (Exception ex) {
+      %> <jsp:forward page ="index.jsp"/> <%
+}
+    %>
       <div class="navbar" style="color: white;">
         <ul>
           <li><a href="ahomeLoggedIn.jsp">Home</a></li>

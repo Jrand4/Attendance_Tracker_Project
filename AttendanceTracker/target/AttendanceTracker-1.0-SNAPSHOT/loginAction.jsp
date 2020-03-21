@@ -13,28 +13,31 @@
   </head>
   <body>
     <%
-      String email = request.getParameter("email");
+      String userName = request.getParameter("user");
       String password = request.getParameter("psw");
       String userType;
       String sql = "select userUserName, userPassword from user where userUserName = '"
-              + email + "' and userPassword = '" + password + "'";
+              + userName + "' and userPassword = '" + password + "'";
       String sql2 = "select userType from user where userUserName = '"
-              + email + "' and userPassword = '" + password + "'";
+              + userName + "' and userPassword = '" + password + "'";
       DBConnect dbConnect = new DBConnect();
       String validation = dbConnect.isValid(sql);
+
       out.println("<h2>" + validation + "</h2>");
       if (!validation.equals("Login Failed")) {
         String uType = dbConnect.getUserType(sql2);
         if (!uType.equals("NONE")) {
-          if (uType.equals("faculty")) {
-    %> <jsp:forward page ="fhomeLoggedIn.jsp"/> <%
-    } else if (uType.equals("admin")) {
-    %> <jsp:forward page ="ahomeLoggedIn.jsp"/> <%
-} else if (uType.equals("student")) {
-    %> <jsp:forward page ="shomeLoggedIn.jsp"/> <%
+          session.setAttribute("userType", uType);
+          session.setAttribute("userName", userName);
+          if (uType.equals("faculty")) {          
+              %> <jsp:forward page ="fhomeLoggedIn.jsp"/> <%
+    }     else if (uType.equals("admin")) {
+              %> <jsp:forward page ="ahomeLoggedIn.jsp"/> <%
+    }     else if (uType.equals("student")) {
+              %> <jsp:forward page ="shomeLoggedIn.jsp"/> <%
+          }
+        }
       }
-    }
-  }
     %>.
     <h1>Hello World!</h1>
   </body>

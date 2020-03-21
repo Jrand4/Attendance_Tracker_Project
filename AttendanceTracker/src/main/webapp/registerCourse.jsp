@@ -117,6 +117,15 @@
       </style>
     </head>
     <body>
+      <%
+        try {
+          if (!session.getAttribute("userType").equals("admin")) {
+      %> <jsp:forward page ="index.jsp"/> <%
+      }
+    } catch (Exception ex) {
+      %> <jsp:forward page ="index.jsp"/> <%
+}
+      %>
       <div class="navbar" style="color: white;">
         <ul>
           <li><a href="ahomeLoggedIn.jsp">Home</a></li>
@@ -127,6 +136,10 @@
       </div>
       <div class="sidecontent">
         <form name="update" action="registerCourseAction.jsp">
+          <div class="form-group">
+            <label for="courseterm">Course Term:</label>
+            <input type="text" class="form-control" name="courseterm">
+          </div>
           <div class="form-group">
             <label for="coursename">Course Name:</label>
             <input type="text" class="form-control" name="coursename">
@@ -147,27 +160,27 @@
             <label class="w3-text-blue"><b>Days Taught:</b></label>
             <div class="form-check-inline">
               <label class="form-check-label">
-                <input type="checkbox" class="form-check-input" value="">M
+                <input type="checkbox" class="form-check-input" name = "coursedays" value="M">M
               </label>
             </div>
             <div class="form-check-inline">
               <label class="form-check-label">
-                <input type="checkbox" class="form-check-input" value="">T
+                <input type="checkbox" class="form-check-input"  name = "coursedays" value="T">T
               </label>
             </div>
             <div class="form-check-inline">
               <label class="form-check-label">
-                <input type="checkbox" class="form-check-input" value="">W
+                <input type="checkbox" class="form-check-input"  name = "coursedays" value="W">W
               </label>
             </div>  
             <div class="form-check-inline">
               <label class="form-check-label">
-                <input type="checkbox" class="form-check-input" value="">R
+                <input type="checkbox" class="form-check-input"  name = "coursedays" value="R">R
               </label>
             </div>
             <div class="form-check-inline">
               <label class="form-check-label">
-                <input type="checkbox" class="form-check-input" value="">F
+                <input type="checkbox" class="form-check-input"  name = "coursedays" value="F">F
               </label>
             </div>
           </div>
@@ -183,7 +196,7 @@
         </form>
       </div>
       <div class="sidetitle">
-        Please register new user
+        Please register new course
       </div>
       <div class="content">
       </div>
