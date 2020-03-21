@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 11, 2020 at 11:54 PM
+-- Generation Time: Mar 21, 2020 at 06:15 PM
 -- Server version: 10.4.8-MariaDB
 -- PHP Version: 7.1.32
 
@@ -70,6 +70,7 @@ CREATE TABLE `availablenumbers` (
 
 CREATE TABLE `course` (
   `courseID` int(3) NOT NULL,
+  `CourseTerm` varchar(25) NOT NULL,
   `courseName` varchar(50) NOT NULL,
   `courseCategory` varchar(10) NOT NULL,
   `courseNumber` varchar(10) NOT NULL,
@@ -78,6 +79,16 @@ CREATE TABLE `course` (
   `courseStartTime` varchar(15) NOT NULL,
   `courseEndTime` varchar(15) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `course`
+--
+
+INSERT INTO `course` (`courseID`, `CourseTerm`, `courseName`, `courseCategory`, `courseNumber`, `courseSection`, `courseDays`, `courseStartTime`, `courseEndTime`) VALUES
+(1, 'SP20', 'LinearAlgebra', 'MATH-2600', '30104', '01', 'MW', '12:30PM', '1:45PM'),
+(2, 'SP20', 'Microprocessors', 'CSC-3600', '30112', '01', 'MF', '9:30AM', '10:45AM'),
+(3, 'SP20', 'MobileApplicationDevelopment', 'CSC-3560', '30457', '01', 'TR', '3:30PM', '4:45PM'),
+(4, 'SP20', 'SoftwareEngineering', 'CSC-4400', '30190', '01', 'MW', '11:00AM', '12:15PM');
 
 -- --------------------------------------------------------
 
@@ -292,7 +303,7 @@ ALTER TABLE `availablenumbers`
 -- AUTO_INCREMENT for table `course`
 --
 ALTER TABLE `course`
-  MODIFY `courseID` int(3) NOT NULL AUTO_INCREMENT;
+  MODIFY `courseID` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `coursestudentabsence`
