@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 21, 2020 at 06:15 PM
+-- Generation Time: Mar 21, 2020 at 10:34 PM
 -- Server version: 10.4.8-MariaDB
 -- PHP Version: 7.1.32
 
@@ -133,7 +133,7 @@ CREATE TABLE `facultycourse` (
   `facultyCourseID` int(3) NOT NULL,
   `facultyID` int(3) NOT NULL,
   `courseID` int(3) NOT NULL,
-  `takesAttendance` varchar(5) NOT NULL
+  `takesAttendance` varchar(5) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -156,7 +156,8 @@ INSERT INTO `student` (`studentID`, `totalAbsence`, `userID`) VALUES
 (1, 0, 3),
 (3, 0, 4),
 (4, 0, 5),
-(5, 0, 6);
+(5, 0, 6),
+(6, 0, 9);
 
 -- --------------------------------------------------------
 
@@ -200,7 +201,8 @@ INSERT INTO `user` (`userID`, `userNumber`, `userFirstName`, `userLastName`, `us
 (5, '01395023', 'Freddy', 'Fredderson', 'FFredderson1@student.edu', 'FFredd@gmail.com', 'student', 'FFredderson1', 'FS-5023'),
 (6, '01395024', 'George', 'Albertson', 'GAlbertson2@student.edu', 'GAlbert@gmail.com', 'student', 'GAlbertson2', 'FS-5024'),
 (7, '01395025', 'Nancy', 'Mancy', 'NMancy1@faculty.edu', 'Nannymancy@gmail.com', 'faculty', 'NMancy1', 'FS-5025'),
-(8, '01395026', 'Pickles', 'Mickles', 'PMickles1@faculty.edu', 'PickMick@gmail.com', 'faculty', 'PMickles1', 'FS-5026');
+(8, '01395026', 'Pickles', 'Mickles', 'PMickles1@faculty.edu', 'PickMick@gmail.com', 'faculty', 'PMickles1', 'FS-5026'),
+(9, '01395027', 'John', 'King', 'JKing1@student.edu', 'jk@king.com', 'student', 'JKing1', 'FS-5027');
 
 --
 -- Indexes for dumped tables
@@ -327,7 +329,7 @@ ALTER TABLE `facultycourse`
 -- AUTO_INCREMENT for table `student`
 --
 ALTER TABLE `student`
-  MODIFY `studentID` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `studentID` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `studentcourse`
@@ -339,7 +341,7 @@ ALTER TABLE `studentcourse`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `userID` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `userID` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- Constraints for dumped tables
