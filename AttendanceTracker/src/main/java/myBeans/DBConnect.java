@@ -82,7 +82,8 @@ public class DBConnect {
     }
     return count;
   }
-    public int getLastNum(String sql) {
+
+  public int getLastNum(String sql) {
     String message = openDB();
     int count = 0;
     if (message.equals("Opened")) {
@@ -116,6 +117,29 @@ public class DBConnect {
     return message;
   }
 
+  public String getUserIDFromUserName(String sql) {
+    String result = "";
+    String message = openDB();
+    if (message.equals("Opened")) {
+      try {
+        rst = stm.executeQuery(sql);
+        rsmd = rst.getMetaData();
+        int count = rsmd.getColumnCount();
+        if (count == 1 && rst.next()) {
+          result = rst.getString(1);
+        } else {
+          result = "NONE";
+        }
+        message = closeDB();
+        return result;
+      } catch (Exception e) {
+        return e.getMessage();
+      }
+    } else {
+      return message;
+    }
+  }
+
   public String getUserType(String sql) {
     String result = "";
     String message = openDB();
@@ -128,6 +152,110 @@ public class DBConnect {
           result = rst.getString(1);
         } else {
           result = "NONE";
+        }
+        message = closeDB();
+        return result;
+      } catch (Exception e) {
+        return e.getMessage();
+      }
+    } else {
+      return message;
+    }
+  }
+
+  public String htmlAddCourseList(String sql) {
+    String result = "";
+    String message = openDB();
+    if (message.equals("Opened")) {
+      try {
+        rst = stm.executeQuery(sql);
+        rsmd = rst.getMetaData();
+        int count = rsmd.getColumnCount();
+        //result += "<a class=\"courseListLink\" href=\"courseViewOverall.jsp\">";
+        // create data rows
+        while (rst.next()) {
+          result += "<a class=\"courseListLink\" href=\"addCourseAction.jsp";
+          for (int i = 0; i < count; i++) {
+            if (i == 0) {
+              result += "?value=" + rst.getString(i + 1) + "\">";
+            } else if (i == 5) {
+              result += " S" + rst.getString(i + 1) + " \n";
+            } else if (i == 7) {
+              result += " " + rst.getString(i + 1) + " to \n";
+            } else {
+              result += " " + rst.getString(i + 1) + " \n";
+            }
+          }
+          result += "</a>\n";
+        }
+        message = closeDB();
+        return result;
+      } catch (Exception e) {
+        return e.getMessage();
+      }
+    } else {
+      return message;
+    }
+  }
+  
+  public String htmlRemoveCourseList(String sql) {
+    String result = "";
+    String message = openDB();
+    if (message.equals("Opened")) {
+      try {
+        rst = stm.executeQuery(sql);
+        rsmd = rst.getMetaData();
+        int count = rsmd.getColumnCount();
+        //result += "<a class=\"courseListLink\" href=\"courseViewOverall.jsp\">";
+        // create data rows
+        while (rst.next()) {
+          result += "<a class=\"courseListLink\" href=\"removeCourseAction.jsp";
+          for (int i = 0; i < count; i++) {
+            if (i == 0) {
+              result += "?value=" + rst.getString(i + 1) + "\">";
+            } else if (i == 5) {
+              result += " S" + rst.getString(i + 1) + " \n";
+            } else if (i == 7) {
+              result += " " + rst.getString(i + 1) + " to \n";
+            } else {
+              result += " " + rst.getString(i + 1) + " \n";
+            }
+          }
+          result += "</a>\n";
+        }
+        message = closeDB();
+        return result;
+      } catch (Exception e) {
+        return e.getMessage();
+      }
+    } else {
+      return message;
+    }
+  }
+  public String htmlCourseList(String sql) {
+    String result = "";
+    String message = openDB();
+    if (message.equals("Opened")) {
+      try {
+        rst = stm.executeQuery(sql);
+        rsmd = rst.getMetaData();
+        int count = rsmd.getColumnCount();
+        //result += "<a class=\"courseListLink\" href=\"courseViewOverall.jsp\">";
+        // create data rows
+        while (rst.next()) {
+          result += "<a class=\"courseListLink\" href=\"courseViewOverall.jsp";
+          for (int i = 0; i < count; i++) {
+            if (i == 0) {
+              result += "?value=" + rst.getString(i + 1) + "\">";
+            } else if (i == 5) {
+              result += " S" + rst.getString(i + 1) + " \n";
+            } else if (i == 7) {
+              result += " " + rst.getString(i + 1) + " to \n";
+            } else {
+              result += " " + rst.getString(i + 1) + " \n";
+            }
+          }
+          result += "</a>\n";
         }
         message = closeDB();
         return result;

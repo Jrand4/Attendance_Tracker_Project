@@ -1,4 +1,4 @@
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page contentType="text/html" pageEncoding="UTF-8" import="myBeans.DBConnect"%>
 <!DOCTYPE html>
 <html>
   <head>
@@ -90,7 +90,7 @@
         float: bottom;
         width: 100%;
         height: calc(100% - 25px);
-        font-size: 25px;
+        font-size: 15px;
       }
 
       .courseListLink {
@@ -237,7 +237,11 @@
         <a class="courseNavListLink" href="removeCourse.jsp">Remove Course</a>
       </div>
       <div class="courseList">
-        <a class="courseListLink" href="courseViewOverall.jsp">MATH 2600 Linear Algebra<br>Students: 8</a>
+                 <%
+          String sql2 = "select course.* from course inner join facultycourse on course.courseID = facultycourse.courseID, faculty,user where faculty.facultyID = facultycourse.facultyID and faculty.userID = user.userID and user.userUserName like '%" + session.getAttribute("userName") + "%' order by courseTerm asc, courseCategory asc";
+          DBConnect dbConnect2 = new DBConnect();
+        %>
+        <%= dbConnect2.htmlCourseList(sql2)%>
       </div>
     </div>
     <h1>Hello World!</h1>
