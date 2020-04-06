@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 21, 2020 at 10:34 PM
+-- Generation Time: Apr 06, 2020 at 10:21 PM
 -- Server version: 10.4.8-MariaDB
 -- PHP Version: 7.1.32
 
@@ -21,17 +21,6 @@ SET time_zone = "+00:00";
 --
 -- Database: `attendance_tracker`
 --
-
--- --------------------------------------------------------
-
---
--- Table structure for table `absence`
---
-
-CREATE TABLE `absence` (
-  `absenceID` int(5) NOT NULL,
-  `absenceDate` date NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -88,7 +77,8 @@ INSERT INTO `course` (`courseID`, `CourseTerm`, `courseName`, `courseCategory`, 
 (1, 'SP20', 'LinearAlgebra', 'MATH-2600', '30104', '01', 'MW', '12:30PM', '1:45PM'),
 (2, 'SP20', 'Microprocessors', 'CSC-3600', '30112', '01', 'MF', '9:30AM', '10:45AM'),
 (3, 'SP20', 'MobileApplicationDevelopment', 'CSC-3560', '30457', '01', 'TR', '3:30PM', '4:45PM'),
-(4, 'SP20', 'SoftwareEngineering', 'CSC-4400', '30190', '01', 'MW', '11:00AM', '12:15PM');
+(4, 'SP20', 'SoftwareEngineering', 'CSC-4400', '30190', '01', 'MW', '11:00AM', '12:15PM'),
+(5, 'SP20', 'CalculusII', 'MATH-2400', '33109', 'S01', 'TR', '2:00PM', '3:15PM');
 
 -- --------------------------------------------------------
 
@@ -99,9 +89,16 @@ INSERT INTO `course` (`courseID`, `CourseTerm`, `courseName`, `courseCategory`, 
 CREATE TABLE `coursestudentabsence` (
   `courseStudentAbsenceID` int(5) NOT NULL,
   `courseID` int(3) NOT NULL,
-  `absenceID` int(5) NOT NULL,
-  `studentID` int(3) NOT NULL
+  `studentID` int(3) NOT NULL,
+  `date` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `coursestudentabsence`
+--
+
+INSERT INTO `coursestudentabsence` (`courseStudentAbsenceID`, `courseID`, `studentID`, `date`) VALUES
+(1, 4, 6, '2020-04-03');
 
 -- --------------------------------------------------------
 
@@ -135,6 +132,14 @@ CREATE TABLE `facultycourse` (
   `courseID` int(3) NOT NULL,
   `takesAttendance` varchar(5) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `facultycourse`
+--
+
+INSERT INTO `facultycourse` (`facultyCourseID`, `facultyID`, `courseID`, `takesAttendance`) VALUES
+(6, 1, 2, 'No'),
+(7, 2, 4, 'No');
 
 -- --------------------------------------------------------
 
@@ -170,6 +175,13 @@ CREATE TABLE `studentcourse` (
   `studentID` int(3) NOT NULL,
   `courseID` int(3) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `studentcourse`
+--
+
+INSERT INTO `studentcourse` (`studentCourseID`, `studentID`, `courseID`) VALUES
+(1, 6, 4);
 
 -- --------------------------------------------------------
 
@@ -209,12 +221,6 @@ INSERT INTO `user` (`userID`, `userNumber`, `userFirstName`, `userLastName`, `us
 --
 
 --
--- Indexes for table `absence`
---
-ALTER TABLE `absence`
-  ADD PRIMARY KEY (`absenceID`);
-
---
 -- Indexes for table `admin`
 --
 ALTER TABLE `admin`
@@ -239,7 +245,6 @@ ALTER TABLE `course`
 ALTER TABLE `coursestudentabsence`
   ADD PRIMARY KEY (`courseStudentAbsenceID`),
   ADD KEY `courseID` (`courseID`),
-  ADD KEY `absenceID` (`absenceID`),
   ADD KEY `studentID` (`studentID`);
 
 --
@@ -284,12 +289,6 @@ ALTER TABLE `user`
 --
 
 --
--- AUTO_INCREMENT for table `absence`
---
-ALTER TABLE `absence`
-  MODIFY `absenceID` int(5) NOT NULL AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT for table `admin`
 --
 ALTER TABLE `admin`
@@ -305,13 +304,13 @@ ALTER TABLE `availablenumbers`
 -- AUTO_INCREMENT for table `course`
 --
 ALTER TABLE `course`
-  MODIFY `courseID` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `courseID` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `coursestudentabsence`
 --
 ALTER TABLE `coursestudentabsence`
-  MODIFY `courseStudentAbsenceID` int(5) NOT NULL AUTO_INCREMENT;
+  MODIFY `courseStudentAbsenceID` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `faculty`
@@ -323,7 +322,7 @@ ALTER TABLE `faculty`
 -- AUTO_INCREMENT for table `facultycourse`
 --
 ALTER TABLE `facultycourse`
-  MODIFY `facultyCourseID` int(3) NOT NULL AUTO_INCREMENT;
+  MODIFY `facultyCourseID` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `student`
@@ -335,7 +334,7 @@ ALTER TABLE `student`
 -- AUTO_INCREMENT for table `studentcourse`
 --
 ALTER TABLE `studentcourse`
-  MODIFY `studentCourseID` int(3) NOT NULL AUTO_INCREMENT;
+  MODIFY `studentCourseID` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `user`
@@ -357,7 +356,6 @@ ALTER TABLE `admin`
 -- Constraints for table `coursestudentabsence`
 --
 ALTER TABLE `coursestudentabsence`
-  ADD CONSTRAINT `coursestudentabsence_ibfk_1` FOREIGN KEY (`absenceID`) REFERENCES `absence` (`absenceID`),
   ADD CONSTRAINT `coursestudentabsence_ibfk_2` FOREIGN KEY (`courseID`) REFERENCES `course` (`courseID`),
   ADD CONSTRAINT `coursestudentabsence_ibfk_3` FOREIGN KEY (`studentID`) REFERENCES `student` (`studentID`);
 
