@@ -137,27 +137,27 @@
       <div class="sidecontent">
         <form name="update" action="registerCourseAction.jsp">
           <div class="form-group">
-            <label for="courseterm">Course Term:</label>
+            <label for="courseterm">Course Term:(ex: SP20)</label>
             <input type="text" class="form-control" name="courseterm">
           </div>
           <div class="form-group">
-            <label for="coursename">Course Name:</label>
+            <label for="coursename">Course Name:(ex: CalculusII))</label>
             <input type="text" class="form-control" name="coursename">
           </div>
           <div class="form-group">
-            <label for="coursecategory">Course Category:</label>
+            <label for="coursecategory">Course Category:(ex: MATH-2400)</label>
             <input type="text" class="form-control" name="coursecategory">
           </div>
           <div class="form-group">
-            <label for="coursenumber">Course Number:</label>
+            <label for="coursenumber">Course Number:(ex: 33109)</label>
             <input type="text" class="form-control" name="coursenumber">
           </div>
           <div class="form-group">
-            <label for="coursesection">Course Section:</label>
+            <label for="coursesection">Course Section:(ex: S01)</label>
             <input type="text" class="form-control" name="coursesection">
           </div>
           <div class="form-group">
-            <label class="w3-text-blue"><b>Days Taught:</b></label>
+            <label class="w3-text-blue"><b>Days Taught:(ex: T R)</b></label>
             <div class="form-check-inline">
               <label class="form-check-label">
                 <input type="checkbox" class="form-check-input" name = "coursedays" value="M">M
@@ -185,11 +185,11 @@
             </div>
           </div>
           <div class="form-group">
-            <label for="coursestarttime">Course Start Time:</label>
+            <label for="coursestarttime">Course Start Time:(ex: 2:00PM)</label>
             <input type="text" class="form-control" name="coursestarttime">
           </div>
           <div class="form-group">
-            <label for="courseendtime">Course End Time:</label>
+            <label for="courseendtime">Course End Time:(ex: 3:15PM)</label>
             <input type="text" class="form-control" name="courseendtime">
           </div>
           <button type="submit" class="btn btn-success">Submit</button>

@@ -22,6 +22,12 @@ public class DBConnect {
   private ResultSet rst = null;             // returns table of query
   private ResultSetMetaData rsmd = null;    // returns the structure information of the table
 
+  private Connection conn2 = null;           // creates the pipeline 
+  private Statement stm2 = null;
+  private PreparedStatement pstm2 = null;
+  private ResultSet rst2 = null;             // returns table of query
+  private ResultSetMetaData rsmd2 = null;    // returns the structure information of the table
+
   // Utility Methods
   private String openDB() {
     try {
@@ -34,10 +40,31 @@ public class DBConnect {
     return "Opened";
   }
 
+  private String openDB2() {
+    try {
+      Class.forName(driver);
+      conn2 = DriverManager.getConnection(url, user, pwd);
+      stm2 = conn2.createStatement();
+    } catch (Exception e) {
+      return e.getMessage();
+    }
+    return "Opened";
+  }
+
   private String closeDB() {
     try {
       stm.close();
       conn.close();
+    } catch (Exception e) {
+      return e.getMessage();
+    }
+    return "Closed";
+  }
+
+  private String closeDB2() {
+    try {
+      stm2.close();
+      conn2.close();
     } catch (Exception e) {
       return e.getMessage();
     }
@@ -76,6 +103,23 @@ public class DBConnect {
           count++;
         }
         message = closeDB();
+      } catch (Exception ex) {
+        return 0;
+      }
+    }
+    return count;
+  }
+
+  public int getAbsenceCount(String sql) {
+    String message = openDB2();
+    int count = 0;
+    if (message.equals("Opened")) {
+      try {
+        rst2 = stm2.executeQuery(sql);
+        while (rst2.next()) {
+          count++;
+        }
+        message = closeDB2();
       } catch (Exception ex) {
         return 0;
       }
@@ -197,7 +241,30 @@ public class DBConnect {
       return message;
     }
   }
-  
+
+  public String getData(String sql) {
+    String result = "";
+    String message = openDB2();
+    if (message.equals("Opened")) {
+      try {
+        rst2 = stm2.executeQuery(sql);
+        rsmd2 = rst2.getMetaData();
+        int count = rsmd2.getColumnCount();
+        while (rst2.next()) {
+          for (int i = 0; i < count; i++) {
+            result += rst2.getString(i + 1) + " ";
+          }
+        }
+        message = closeDB2();
+        return result;
+      } catch (Exception e) {
+        return e.getMessage();
+      }
+    } else {
+      return message;
+    }
+  }
+
   public String htmlRemoveCourseList(String sql) {
     String result = "";
     String message = openDB();
@@ -232,6 +299,7 @@ public class DBConnect {
       return message;
     }
   }
+
   public String htmlCourseList(String sql) {
     String result = "";
     String message = openDB();
@@ -251,6 +319,43 @@ public class DBConnect {
               result += " S" + rst.getString(i + 1) + " \n";
             } else if (i == 7) {
               result += " " + rst.getString(i + 1) + " to \n";
+            } else {
+              result += " " + rst.getString(i + 1) + " \n";
+            }
+          }
+          result += "</a>\n";
+        }
+        message = closeDB();
+        return result;
+      } catch (Exception e) {
+        return e.getMessage();
+      }
+    } else {
+      return message;
+    }
+  }
+
+  public String htmlStudentList(String sql, String courseID) {
+    String result = "";
+    String message = openDB();
+    if (message.equals("Opened")) {
+      try {
+        rst = stm.executeQuery(sql);
+        rsmd = rst.getMetaData();
+        int count = rsmd.getColumnCount();
+        String userID = "";
+        String studentID = "";
+        while (rst.next()) {
+          result += "<a class=\"courseListLink\" href=\"studentAbsentClassRecord.jsp";
+          for (int i = 0; i < count; i++) {
+            if (i == 0) {
+              userID = rst.getString(i + 1);
+              result += "?value=" + userID + "\">";
+              studentID = getData("select studentID from student where userID = '" + userID + "'");
+            } else if (i == 1) {
+              result += " " + rst.getString(i + 1) + ", \n";
+            } else if (i == 2) {
+              result += rst.getString(i + 1) + " \n<br>Absences: " + getAbsenceCount("select courseStudentAbsenceID from courseStudentAbsence where studentID = '" + studentID + "' AND courseID = '" + courseID + "'");
             } else {
               result += " " + rst.getString(i + 1) + " \n";
             }

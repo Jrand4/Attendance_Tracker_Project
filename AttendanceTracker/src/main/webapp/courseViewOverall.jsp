@@ -198,8 +198,15 @@
       %> <jsp:forward page ="index.jsp"/> <%
 }
     %>
+    <%
+        String courseID = request.getParameter("value");
+        String sql = "select courseCategory,courseName from course where courseID = '" + courseID + "'";
+        DBConnect dbConnect = new DBConnect();
+        String courseInfo = dbConnect.getData(sql);
+        sql = "select user.userID,user.userLastName,user.userFirstName from user inner join student on user.userID = student.userID inner join studentcourse on student.studentID = studentcourse.studentID inner join course on studentcourse.courseID = course.courseID where course.courseID = '" + courseID + "' order by user.userLastName asc";
+      %>
     <div class="title">
-      Course Manager
+      Course Manager 
     </div>
     <div class="navbarleft" style="color: white;">
       <div class="navList">
@@ -215,19 +222,12 @@
     </div>
     <div class="content">
       <div class="courseNav">
-        Selected Course: MATH 2600 Linear Algebra
-        <a class="courseNavListLink" href="courseViewByDay.jsp">By Day</a>
-        <a class="courseNavListLink" href="courseViewOverall.jsp">Overview</a>
+        Selected Course: <%= courseInfo %>
+        <a class="courseNavListLink" href="courseViewByDay.jsp?value=<%=courseID%>">By Day</a>
+        <a class="courseNavListLink" href="courseViewOverall.jsp?value=<%=courseID%>">Overview</a>
       </div>
       <div class="courseList">
-        <a class="courseListLink" href="studentAbsentClassRecord.jsp">Billson, Billy<br>Absences: 1</a>
-        <a class="courseListLink" href="studentAbsentClassRecord.jsp">Cinderson, Cindy<br>Absences: 9</a>
-        <a class="courseListLink" href="studentAbsentClassRecord.jsp">Derickson, Derick<br>Absences: 2</a>
-        <a class="courseListLink" href="studentAbsentClassRecord.jsp">Frankson, Frank<br>Absences: 0</a>
-        <a class="courseListLink" href="studentAbsentClassRecord.jsp">Happyson, Happy<br>Absences: 2</a>
-        <a class="courseListLink" href="studentAbsentClassRecord.jsp">Jackson, Jack<br>Absences: 5</a>
-        <a class="courseListLink" href="studentAbsentClassRecord.jsp">Lloydson, Lloyd<br>Absences: 2</a>
-        <a class="courseListLink" href="studentAbsentClassRecord.jsp">Zackerson, Zack<br>Absences: 4</a>
+        <%=  dbConnect.htmlStudentList(sql,courseID) %>
       </div>
     </div>
     <div class="sidecontent">
