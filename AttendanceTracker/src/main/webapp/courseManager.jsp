@@ -196,6 +196,7 @@
   </head>
   <body>
     <% 
+      session.setAttribute("courseID", "");
         try {
           if (!session.getAttribute("userType").equals("faculty")) {
       %> <jsp:forward page ="index.jsp"/> <%

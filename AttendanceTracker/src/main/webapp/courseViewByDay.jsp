@@ -1,3 +1,4 @@
+<%@page import="java.sql.Date"%>
 <%@page contentType="text/html" pageEncoding="UTF-8" import="myBeans.DBConnect"%>
 <!DOCTYPE html>
 <html>
@@ -12,7 +13,7 @@
     <style>
       *{
         box-sizing: border-box;
-        
+
       }
       body {
         margin: 0;
@@ -20,7 +21,28 @@
       }
       a{
         color: white;
-        float: left;
+        float: right;
+      }
+      btn btn-info{
+        float: right;
+      }
+      ul{
+        background-color: #0C8D60;
+      }
+      li{
+        background-color: #0C8D60;
+      }
+      .list-group-item{
+        display: block;
+        color: black;
+        text-align: left;
+        padding: 25px 25px;
+        text-decoration: none;
+        background-color: #13EBA2;
+        border: 2px solid #000;
+        width: 100%;
+        margin-top: 15px;
+        height: 75px;
       }
       .navList {
         list-style-type:none;
@@ -32,7 +54,12 @@
         height: 25px;
         font-size: 16px;
       }
-
+      .previousButton{
+        float:left;
+      }
+      .nextButton{
+        float:right;
+      }
       .navListLink {
         display: block;
         color: white;
@@ -52,6 +79,18 @@
         text-align: left;
         padding-top: 5px;
         padding-left: 25px;
+        list-style-type:none;
+        overflow: visible;
+        background-color: #05AC72;
+        width: 100%;
+        height: 50px;
+        font-size: 25px;
+        border: 3px solid #000;
+      }
+      .dateNav{
+        color:white;
+        text-align: center;
+        padding-top: 5px;
         list-style-type:none;
         overflow: visible;
         background-color: #05AC72;
@@ -189,17 +228,26 @@
     </style>
   </head>
   <body>
-        <% 
-        try {
-          if (!session.getAttribute("userType").equals("faculty")) {
-      %> <jsp:forward page ="index.jsp"/> <%
+    <%
+      try {
+        if (!session.getAttribute("userType").equals("faculty")) {
+    %> <jsp:forward page ="index.jsp"/> <%
       }
     } catch (Exception ex) {
-      %> <jsp:forward page ="index.jsp"/> <%
-}
+    %> <jsp:forward page ="index.jsp"/> <%
+      }
+    %>
+    <%
+      Date date = new java.sql.Date(System.currentTimeMillis());
+      String courseID = request.getParameter("value");
+      session.setAttribute("courseID", courseID);
+      String sql = "select courseCategory,courseName from course where courseID = '" + courseID + "'";
+      DBConnect dbConnect = new DBConnect();
+      String courseInfo = dbConnect.getData(sql);
+      sql = "select user.userID,user.userLastName,user.userFirstName from user inner join student on user.userID = student.userID inner join studentcourse on student.studentID = studentcourse.studentID inner join course on studentcourse.courseID = course.courseID where course.courseID = '" + courseID + "' order by user.userLastName asc";
     %>
     <div class="title">
-      Course Manager
+      Course Manager 
     </div>
     <div class="navbarleft" style="color: white;">
       <div class="navList">
@@ -215,19 +263,17 @@
     </div>
     <div class="content">
       <div class="courseNav">
-        Selected Course: MATH 2600 Linear Algebra
-        <a class="courseNavListLink" href="courseViewByDay.jsp">By Day</a>
-        <a class="courseNavListLink" href="courseViewOverall.jsp">Overview</a>
+        Selected Course: <%= courseInfo%>
+        <a class="courseNavListLink" href="courseViewByDay.jsp?value=<%=courseID%>">By Day</a>
+        <a class="courseNavListLink" href="courseViewOverall.jsp?value=<%=courseID%>">Overview</a>
+      </div>
+      <div class="dateNav">
+        <a class="btn btn-secondary previousButton" role="button" location.href="addAbsence.jsp?value=">Previous</a>
+        Selected Date: <%= date%>
+        <a class="btn btn-secondary nextButton" role="button" location.href="addAbsence.jsp?value=">Next</a>
       </div>
       <div class="courseList">
-        <a class="courseListLink" href="studentAbsentClassRecord.jsp">Billson, Billy<br>Absences: 1</a>
-        <a class="courseListLink" href="studentAbsentClassRecord.jsp">Cinderson, Cindy<br>Absences: 9</a>
-        <a class="courseListLink" href="studentAbsentClassRecord.jsp">Derickson, Derick<br>Absences: 2</a>
-        <a class="courseListLink" href="studentAbsentClassRecord.jsp">Frankson, Frank<br>Absences: 0</a>
-        <a class="courseListLink" href="studentAbsentClassRecord.jsp">Happyson, Happy<br>Absences: 2</a>
-        <a class="courseListLink" href="studentAbsentClassRecord.jsp">Jackson, Jack<br>Absences: 5</a>
-        <a class="courseListLink" href="studentAbsentClassRecord.jsp">Lloydson, Lloyd<br>Absences: 2</a>
-        <a class="courseListLink" href="studentAbsentClassRecord.jsp">Zackerson, Zack<br>Absences: 4</a>
+        <%=  dbConnect.htmlStudentByDayList(sql, courseID, date)%>
       </div>
     </div>
     <div class="sidecontent">
@@ -237,7 +283,7 @@
         <a class="courseNavListLink" href="removeCourse.jsp">Remove Course</a>
       </div>
       <div class="courseList">
-                 <%
+        <%
           String sql2 = "select course.* from course inner join facultycourse on course.courseID = facultycourse.courseID, faculty,user where faculty.facultyID = facultycourse.facultyID and faculty.userID = user.userID and user.userUserName like '%" + session.getAttribute("userName") + "%' order by courseTerm asc, courseCategory asc";
           DBConnect dbConnect2 = new DBConnect();
         %>

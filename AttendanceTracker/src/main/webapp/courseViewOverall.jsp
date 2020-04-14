@@ -200,6 +200,7 @@
     %>
     <%
         String courseID = request.getParameter("value");
+        session.setAttribute("courseID", courseID);
         String sql = "select courseCategory,courseName from course where courseID = '" + courseID + "'";
         DBConnect dbConnect = new DBConnect();
         String courseInfo = dbConnect.getData(sql);
@@ -227,7 +228,7 @@
         <a class="courseNavListLink" href="courseViewOverall.jsp?value=<%=courseID%>">Overview</a>
       </div>
       <div class="courseList">
-        <%=  dbConnect.htmlStudentList(sql,courseID) %>
+        <%=  dbConnect.htmlStudentOverallList(sql,courseID) %>
       </div>
     </div>
     <div class="sidecontent">
