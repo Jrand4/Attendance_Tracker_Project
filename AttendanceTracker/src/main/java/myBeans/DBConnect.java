@@ -242,6 +242,7 @@ public class DBConnect {
     }
   }
 
+  
   public String getData(String sql) {
     String result = "";
     String message = openDB2();
@@ -299,6 +300,36 @@ public class DBConnect {
       return message;
     }
   }
+    public String htmlRemoveAbsenceList(String sql) {
+    String result = "";
+    String message = openDB();
+    if (message.equals("Opened")) {
+      try {
+        rst = stm.executeQuery(sql);
+        rsmd = rst.getMetaData();
+        int count = rsmd.getColumnCount();
+        //result += "<a class=\"courseListLink\" href=\"removeAbsenceAction.jsp\">";
+        // create data rows
+        while (rst.next()) {
+          result += "<a class=\"courseListLink\" href=\"removeAbsenceAction.jsp";
+          for (int i = 0; i < count; i++) {
+            if (i == 0) {
+              result += "?value=" + rst.getString(i + 1) + "\">";
+            } else {
+              result += " " + rst.getString(i + 1) + " \n";
+            }
+          }
+          result += "</a>\n";
+        }
+        message = closeDB();
+        return result;
+      } catch (Exception e) {
+        return e.getMessage();
+      }
+    } else {
+      return message;
+    }
+  }
 
   public String htmlCourseList(String sql) {
     String result = "";
@@ -335,7 +366,7 @@ public class DBConnect {
     }
   }
 
-  public String htmlStudentList(String sql, String courseID) {
+  public String htmlStudentOverallList(String sql, String courseID) {
     String result = "";
     String message = openDB();
     if (message.equals("Opened")) {
@@ -362,6 +393,42 @@ public class DBConnect {
           }
           result += "</a>\n";
         }
+        message = closeDB();
+        return result;
+      } catch (Exception e) {
+        return e.getMessage();
+      }
+    } else {
+      return message;
+    }
+  }
+    public String htmlStudentByDayList(String sql, String courseID, Date date) {
+    String result = "";
+    String message = openDB();
+    if (message.equals("Opened")) {
+      try {
+        rst = stm.executeQuery(sql);
+        rsmd = rst.getMetaData();
+        int count = rsmd.getColumnCount();
+        String userID = "";
+        String studentID = "";
+        String firstName = "";
+        String lastName = "";
+        result += "<ul class=\"list-group\">";
+        while (rst.next()) {
+          result += "<li class=\"list-group-item\">";
+          for (int i = 0; i < count; i++) {
+            if (i == 0) {
+              userID = rst.getString(i + 1);
+            } else if (i == 1) {
+              lastName = rst.getString(i + 1);
+            } else if (i == 2) {
+              firstName += rst.getString(i + 1) + " \n";
+            } 
+          }
+          result += lastName + "," + firstName + "<a class=\"btn btn-info\" role=\"button\" location.href=\"addAbsence.jsp?value=" + userID + "\">Absent</a>\n</li>\n";
+        }
+        result += "</ul>";
         message = closeDB();
         return result;
       } catch (Exception e) {
