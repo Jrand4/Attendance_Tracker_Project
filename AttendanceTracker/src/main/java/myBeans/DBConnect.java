@@ -221,7 +221,7 @@ public class DBConnect {
           result += "<a class=\"courseListLink\" href=\"addCourseAction.jsp";
           for (int i = 0; i < count; i++) {
             if (i == 0) {
-              result += "?value=" + rst.getString(i + 1) + "\">";
+              result += "?courseID=" + rst.getString(i + 1) + "\">";
             } else if (i == 5) {
               result += " S" + rst.getString(i + 1) + " \n";
             } else if (i == 7) {
@@ -242,7 +242,6 @@ public class DBConnect {
     }
   }
 
-  
   public String getData(String sql) {
     String result = "";
     String message = openDB2();
@@ -280,41 +279,11 @@ public class DBConnect {
           result += "<a class=\"courseListLink\" href=\"removeCourseAction.jsp";
           for (int i = 0; i < count; i++) {
             if (i == 0) {
-              result += "?value=" + rst.getString(i + 1) + "\">";
+              result += "?courseID=" + rst.getString(i + 1) + "\">";
             } else if (i == 5) {
               result += " S" + rst.getString(i + 1) + " \n";
             } else if (i == 7) {
               result += " " + rst.getString(i + 1) + " to \n";
-            } else {
-              result += " " + rst.getString(i + 1) + " \n";
-            }
-          }
-          result += "</a>\n";
-        }
-        message = closeDB();
-        return result;
-      } catch (Exception e) {
-        return e.getMessage();
-      }
-    } else {
-      return message;
-    }
-  }
-    public String htmlRemoveAbsenceList(String sql) {
-    String result = "";
-    String message = openDB();
-    if (message.equals("Opened")) {
-      try {
-        rst = stm.executeQuery(sql);
-        rsmd = rst.getMetaData();
-        int count = rsmd.getColumnCount();
-        //result += "<a class=\"courseListLink\" href=\"removeAbsenceAction.jsp\">";
-        // create data rows
-        while (rst.next()) {
-          result += "<a class=\"courseListLink\" href=\"removeAbsenceAction.jsp";
-          for (int i = 0; i < count; i++) {
-            if (i == 0) {
-              result += "?value=" + rst.getString(i + 1) + "\">";
             } else {
               result += " " + rst.getString(i + 1) + " \n";
             }
@@ -345,7 +314,7 @@ public class DBConnect {
           result += "<a class=\"courseListLink\" href=\"courseViewOverall.jsp";
           for (int i = 0; i < count; i++) {
             if (i == 0) {
-              result += "?value=" + rst.getString(i + 1) + "\">";
+              result += "?courseID=" + rst.getString(i + 1) + "\">";
             } else if (i == 5) {
               result += " S" + rst.getString(i + 1) + " \n";
             } else if (i == 7) {
@@ -381,8 +350,8 @@ public class DBConnect {
           for (int i = 0; i < count; i++) {
             if (i == 0) {
               userID = rst.getString(i + 1);
-              result += "?value=" + userID + "\">";
-              studentID = getData("select studentID from student where userID = '" + userID + "'");
+              result += "?userID=" + userID + "&courseID=" + courseID + "\">";
+              studentID = getStudentIDFromUserID(userID);
             } else if (i == 1) {
               result += " " + rst.getString(i + 1) + ", \n";
             } else if (i == 2) {
@@ -402,9 +371,31 @@ public class DBConnect {
       return message;
     }
   }
-    public String htmlStudentByDayList(String sql, String courseID, Date date) {
+
+  public boolean wasPresentAtDay(String studentID, String courseID, Date date) {
+    String s = "";
+    s = getData("select courseStudentAbsenceID from courseStudentAbsence where courseID = '" + courseID + "' AND studentID = '" + studentID + "' AND date = '" + date + "'");
+    if (s.equals("")) {
+      return true;
+    } else {
+      return false;
+    }
+
+  }
+
+  public String getStudentIDFromUserID(String userID) {
+
+    return getData("select student.studentID from user,student where user.userID = student.userID and student.userID = '" + userID + "'");
+  }
+    public String getUserIDFromStudentID(String studentID) {
+
+    return getData("select user.userID from user,student where user.userID = student.userID and student.studentID = '" + studentID + "'");
+  }
+
+  public String htmlStudentByDayList(String sql, String courseID, Date date) {
     String result = "";
     String message = openDB();
+    boolean absent = false;
     if (message.equals("Opened")) {
       try {
         rst = stm.executeQuery(sql);
@@ -420,13 +411,46 @@ public class DBConnect {
           for (int i = 0; i < count; i++) {
             if (i == 0) {
               userID = rst.getString(i + 1);
+              studentID = getStudentIDFromUserID(userID);
             } else if (i == 1) {
               lastName = rst.getString(i + 1);
             } else if (i == 2) {
               firstName += rst.getString(i + 1) + " \n";
-            } 
+            }
           }
-          result += lastName + "," + firstName + "<a class=\"btn btn-info\" role=\"button\" location.href=\"addAbsence.jsp?value=" + userID + "\">Absent</a>\n</li>\n";
+          absent = !wasPresentAtDay(studentID, courseID, date);
+          if (!absent) {
+            result += lastName + "," + firstName + "<a class=\"btn btn-info\" role=\"button\" href=\"addAbsence.jsp?courseID=" + courseID + "&studentID=" + studentID + "&date=" + date + "&destination=1\">Absent</a>\n</li>\n";
+          } else {
+            result += lastName + "," + firstName + "[ABSENT] <a class=\"btn btn-warning\" role=\"button\" href=\"removeAbsence.jsp?courseID=" + courseID + "&studentID=" + studentID + "&date=" + date  + "&destination=1\">Excuse</a>\n</li>\n";
+          }
+        }
+        result += "</ul>";
+        message = closeDB();
+        return result;
+      } catch (Exception e) {
+        return e.getMessage();
+      }
+    } else {
+      return message;
+    }
+  }
+
+  public String htmlRemoveAbsenceList(String sql, String studentID, String courseID) {
+    String result = "";
+    String message = openDB();
+    boolean absent = false;
+    if (message.equals("Opened")) {
+      try {
+        rst = stm.executeQuery(sql);
+        rsmd = rst.getMetaData();
+        int count = 0;
+        result += "<ul class=\"list-group\">";
+        Date date = null;
+        while (rst.next()) {
+          date = Date.valueOf(rst.getString(count+1));
+          result += "<li class=\"list-group-item\"> " + date;
+          result += "<a class=\"btn btn-warning\" role=\"button\" href=\"removeAbsence.jsp?courseID=" + courseID + "&studentID=" + studentID + "&date=" + date + "&destination=0\">Excuse</a>\n</li>\n";
         }
         result += "</ul>";
         message = closeDB();

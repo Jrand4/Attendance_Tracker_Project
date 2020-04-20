@@ -238,13 +238,17 @@
       }
     %>
     <%
-      Date date = new java.sql.Date(System.currentTimeMillis());
-      String courseID = request.getParameter("value");
+      String sDate = request.getParameter("date");
+      Date date = Date.valueOf(sDate);
+      Date tomorrow = new Date(date.getTime() + 24*60*60*1000);
+      Date yesterday = new Date(date.getTime() - 24*60*60*1000);
+      String courseID = request.getParameter("courseID");
       session.setAttribute("courseID", courseID);
       String sql = "select courseCategory,courseName from course where courseID = '" + courseID + "'";
       DBConnect dbConnect = new DBConnect();
       String courseInfo = dbConnect.getData(sql);
       sql = "select user.userID,user.userLastName,user.userFirstName from user inner join student on user.userID = student.userID inner join studentcourse on student.studentID = studentcourse.studentID inner join course on studentcourse.courseID = course.courseID where course.courseID = '" + courseID + "' order by user.userLastName asc";
+      
     %>
     <div class="title">
       Course Manager 
@@ -268,9 +272,9 @@
         <a class="courseNavListLink" href="courseViewOverall.jsp?value=<%=courseID%>">Overview</a>
       </div>
       <div class="dateNav">
-        <a class="btn btn-secondary previousButton" role="button" location.href="addAbsence.jsp?value=">Previous</a>
+        <a class="btn btn-secondary previousButton" role="button" href="courseViewByDay.jsp?courseID=<%=courseID%>&date=<%=yesterday%>">Previous</a>
         Selected Date: <%= date%>
-        <a class="btn btn-secondary nextButton" role="button" location.href="addAbsence.jsp?value=">Next</a>
+        <a class="btn btn-secondary nextButton" role="button" href="courseViewByDay.jsp?courseID=<%=courseID%>&date=<%=tomorrow%>">Next</a>
       </div>
       <div class="courseList">
         <%=  dbConnect.htmlStudentByDayList(sql, courseID, date)%>

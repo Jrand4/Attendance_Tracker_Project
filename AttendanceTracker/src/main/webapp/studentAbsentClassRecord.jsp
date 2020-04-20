@@ -26,7 +26,28 @@
       }
       a{
         color: white;
-        float: left;
+        float: right;
+      }
+      btn btn-info{
+        float: right;
+      }
+      ul{
+        background-color: #0C8D60;
+      }
+      li{
+        background-color: #0C8D60;
+      }
+      .list-group-item{
+        display: block;
+        color: black;
+        text-align: left;
+        padding: 25px 25px;
+        text-decoration: none;
+        background-color: #13EBA2;
+        border: 2px solid #000;
+        width: 100%;
+        margin-top: 15px;
+        height: 75px;
       }
       .navList {
         list-style-type:none;
@@ -38,7 +59,12 @@
         height: 25px;
         font-size: 16px;
       }
-
+      .previousButton{
+        float:left;
+      }
+      .nextButton{
+        float:right;
+      }
       .navListLink {
         display: block;
         color: white;
@@ -58,6 +84,18 @@
         text-align: left;
         padding-top: 5px;
         padding-left: 25px;
+        list-style-type:none;
+        overflow: visible;
+        background-color: #05AC72;
+        width: 100%;
+        height: 50px;
+        font-size: 25px;
+        border: 3px solid #000;
+      }
+      .dateNav{
+        color:white;
+        text-align: center;
+        padding-top: 5px;
         list-style-type:none;
         overflow: visible;
         background-color: #05AC72;
@@ -168,7 +206,7 @@
       .sidecontent {
         box-sizing: border-box;
         height: calc(100% - 195px);
-        width: 0%;
+        width: 35%;
         margin-top: 195px;
         margin-bottom: 50px;
         padding-bottom: 10%;
@@ -206,9 +244,9 @@
     <div class="title">
       <%
         DBConnect dbConnect = new DBConnect();
-        String studentUserID = request.getParameter("value");
-        String courseID = session.getAttribute("courseID").toString();
-        String studentID = dbConnect.getData("select student.studentID from user,student where user.userID = student.userID AND user.userID = '" + studentUserID + "'");
+        String studentUserID = request.getParameter("userID");
+        String courseID = request.getParameter("courseID");
+        String studentID = dbConnect.getStudentIDFromUserID(studentUserID);
         String sql = "select userFirstName, userLastName from user where userID = '" + studentUserID + "'";
 
       %>
@@ -229,9 +267,9 @@
     <div class="content">
       <div class="courseList">
         <%
-          sql = "select courseStudentAbsenceID,date from courseStudentAbsence where studentID = '" + studentID + "' AND courseID = '" + courseID + "'";
+          sql = "select date from courseStudentAbsence where studentID = '" + studentID + "' AND courseID = '" + courseID + "'";
         %>
-        <%= dbConnect.htmlRemoveAbsenceList(sql)%>
+        <%= dbConnect.htmlRemoveAbsenceList(sql, studentID, courseID)%>
       </div>
     </div>
     <h1>Hello World!</h1>

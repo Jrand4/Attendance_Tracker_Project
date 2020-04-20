@@ -14,7 +14,7 @@
   <body>
     <%
     DBConnect dbConnect = new DBConnect();
-    String courseID = request.getParameter("value");
+    String courseID = request.getParameter("courseID");
     String sql = "select user.userID from user where user.userUserName like '%" + session.getAttribute("userName") + "%'";
     String userID = dbConnect.getUserIDFromUserName(sql);
     sql = "select faculty.facultyID from user,faculty where user.userID = faculty.userID and user.userUserName like '%" + session.getAttribute("userName") + "%'";

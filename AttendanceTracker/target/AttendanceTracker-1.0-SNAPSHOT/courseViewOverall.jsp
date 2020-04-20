@@ -1,3 +1,4 @@
+<%@page import="java.sql.Date"%>
 <%@page contentType="text/html" pageEncoding="UTF-8" import="myBeans.DBConnect"%>
 <!DOCTYPE html>
 <html>
@@ -199,7 +200,9 @@
 }
     %>
     <%
-        String courseID = request.getParameter("value");
+        Date date = new java.sql.Date(System.currentTimeMillis());
+        String courseID = request.getParameter("courseID");
+        session.setAttribute("courseID", courseID);
         String sql = "select courseCategory,courseName from course where courseID = '" + courseID + "'";
         DBConnect dbConnect = new DBConnect();
         String courseInfo = dbConnect.getData(sql);
@@ -223,11 +226,11 @@
     <div class="content">
       <div class="courseNav">
         Selected Course: <%= courseInfo %>
-        <a class="courseNavListLink" href="courseViewByDay.jsp?value=<%=courseID%>">By Day</a>
-        <a class="courseNavListLink" href="courseViewOverall.jsp?value=<%=courseID%>">Overview</a>
+        <a class="courseNavListLink" href="courseViewByDay.jsp?courseID=<%=courseID%>&date=<%=date%>">By Day</a>
+        <a class="courseNavListLink" href="courseViewOverall.jsp?courseID=<%=courseID%>">Overview</a>
       </div>
       <div class="courseList">
-        <%=  dbConnect.htmlStudentList(sql,courseID) %>
+        <%=  dbConnect.htmlStudentOverallList(sql,courseID) %>
       </div>
     </div>
     <div class="sidecontent">

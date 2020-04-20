@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 06, 2020 at 11:14 PM
+-- Generation Time: Apr 20, 2020 at 08:20 PM
 -- Server version: 10.4.8-MariaDB
 -- PHP Version: 7.1.32
 
@@ -78,7 +78,7 @@ INSERT INTO `course` (`courseID`, `CourseTerm`, `courseName`, `courseCategory`, 
 (2, 'SP20', 'Microprocessors', 'CSC-3600', '30112', '01', 'MF', '9:30AM', '10:45AM'),
 (3, 'SP20', 'MobileApplicationDevelopment', 'CSC-3560', '30457', '01', 'TR', '3:30PM', '4:45PM'),
 (4, 'SP20', 'SoftwareEngineering', 'CSC-4400', '30190', '01', 'MW', '11:00AM', '12:15PM'),
-(5, 'SP20', 'CalculusII', 'MATH-2400', '33109', 'S01', 'TR', '2:00PM', '3:15PM');
+(5, 'SP20', 'CalculusII', 'MATH-2400', '33109', '01', 'TR', '2:00PM', '3:15PM');
 
 -- --------------------------------------------------------
 
@@ -92,15 +92,6 @@ CREATE TABLE `coursestudentabsence` (
   `studentID` int(3) NOT NULL,
   `date` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `coursestudentabsence`
---
-
-INSERT INTO `coursestudentabsence` (`courseStudentAbsenceID`, `courseID`, `studentID`, `date`) VALUES
-(1, 4, 6, '2020-04-03'),
-(2, 4, 6, '2020-04-01'),
-(3, 5, 9, '2020-04-01');
 
 -- --------------------------------------------------------
 
@@ -141,7 +132,8 @@ CREATE TABLE `facultycourse` (
 
 INSERT INTO `facultycourse` (`facultyCourseID`, `facultyID`, `courseID`, `takesAttendance`) VALUES
 (10, 2, 4, 'No'),
-(11, 2, 5, 'No');
+(13, 1, 2, 'No'),
+(18, 2, 5, 'No');
 
 -- --------------------------------------------------------
 
@@ -167,7 +159,9 @@ INSERT INTO `student` (`studentID`, `totalAbsence`, `userID`) VALUES
 (6, 0, 9),
 (7, 0, 10),
 (8, 0, 11),
-(9, 0, 12);
+(9, 0, 12),
+(10, 0, 13),
+(11, 0, 14);
 
 -- --------------------------------------------------------
 
@@ -226,7 +220,9 @@ INSERT INTO `user` (`userID`, `userNumber`, `userFirstName`, `userLastName`, `us
 (9, '01395027', 'John', 'King', 'JKing1@student.edu', 'jk@king.com', 'student', 'JKing1', 'FS-5027'),
 (10, '01395028', 'Karen', 'McClendon', 'KMcClendon1@student.edu', 'MC@student.com', 'student', 'KMcClendon1', 'FS-5028'),
 (11, '01395029', 'Frank', 'Frankson', 'FFrankson1@student.edu', 'FF@student.com', 'student', 'FFrankson1', 'FS-5029'),
-(12, '01395030', 'George', 'Georgeson', 'GGeorgeson1@student.edu', 'GG@student.com', 'student', 'GGeorgeson1', 'FS-5030');
+(12, '01395030', 'George', 'Georgeson', 'GGeorgeson1@student.edu', 'GG@student.com', 'student', 'GGeorgeson1', 'FS-5030'),
+(13, '01395031', 'Micheal', 'Brown', 'MBrown1@student.edu', 'MB@student.com', 'student', 'MBrown1', 'FS-5031'),
+(14, '01395032', 'Ames', 'Archer', 'AArcher1@student.edu', 'Aarch@student.com', 'student', 'AArcher1', 'FS-5032');
 
 --
 -- Indexes for dumped tables
@@ -322,7 +318,7 @@ ALTER TABLE `course`
 -- AUTO_INCREMENT for table `coursestudentabsence`
 --
 ALTER TABLE `coursestudentabsence`
-  MODIFY `courseStudentAbsenceID` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `courseStudentAbsenceID` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT for table `faculty`
@@ -334,13 +330,13 @@ ALTER TABLE `faculty`
 -- AUTO_INCREMENT for table `facultycourse`
 --
 ALTER TABLE `facultycourse`
-  MODIFY `facultyCourseID` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `facultyCourseID` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `student`
 --
 ALTER TABLE `student`
-  MODIFY `studentID` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `studentID` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `studentcourse`
@@ -352,7 +348,7 @@ ALTER TABLE `studentcourse`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `userID` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `userID` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- Constraints for dumped tables
