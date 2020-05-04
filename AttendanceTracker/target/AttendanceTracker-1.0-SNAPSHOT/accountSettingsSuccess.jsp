@@ -169,6 +169,7 @@
           </div>
 
           <button type="submit" class="btn btn-success">Submit</button>
+          SUCCESS - Password Changed
         </form>
       </div>
       <div class="sidetitle">

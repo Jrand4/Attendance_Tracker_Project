@@ -108,7 +108,7 @@
   
    <div class="body_1">
            <li class="nav-item">
-      <a class="nav-link" href="index_1_1.jsp">Forgot Password</a>
+      <a class="nav-link" href="forgotPassword.jsp">Forgot Password</a>
     </li>
     </div>
 

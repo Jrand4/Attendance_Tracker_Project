@@ -118,61 +118,18 @@
       </style>
     </head>
     <body>
-      <%
-        try {
-          if (session.getAttribute("userName").equals("")) {
-      %> <jsp:forward page ="index.jsp"/> <%
-        }
-      } catch (Exception ex) {
-      %> <jsp:forward page ="index.jsp"/> <%
-        }
-      %>
-      <%
-        if (session.getAttribute("userType").equals("admin")) {
-      %> 
-      <div class="navbar" style="color: white;">
-        <ul>
-          <li><a href="ahomeLoggedIn.jsp">Home</a></li>
-          <li><a href="registerUser.jsp">Register New User</a></li>
-          <li><a href="registerCourse.jsp">Register Course</a></li>
-        </ul>
-      </div>
-      <%
-      } else if (session.getAttribute("userType").equals("faculty")) {
-      %> 
-      <div class="navbar" style="color: white;">
-        <ul>
-          <li><a href="fhomeLoggedIn.jsp">Home</a></li>
-          <li><a href="courseManager.jsp">Course Manager</a></li>
-        </ul>
-      </div>
-      <%
-      } else {
-      %>
 
-      <%
-        }
-      %>
       <div class="sidecontent">
-        <form name="update" action="accountSettingsAction.jsp">
+        <form name="update" action="forgotPasswordAction.jsp">
           <div class="form-group">
-            <label for="currentPassword">Current Password:</label>
-            <input type="password" class="form-control" name="currentPassword">
+            <label for="backupEmail">Backup Email:</label>
+            <input type="text" class="form-control" name="backupEmail">
           </div>
-          <div class="form-group">
-            <label for="newPassword">New Password:</label>
-            <input type="password" class="form-control" name="newPassword">
-          </div>
-          <div class="form-group">
-            <label for="cNewPassword">Confirm New Password:</label>
-            <input type="password" class="form-control" name="cNewPassword">
-          </div>
-
           <button type="submit" class="btn btn-success">Submit</button>
         </form>
       </div>
       <div class="sidetitle">
-        Change Password 
+        Enter back-up email
       </div>
       <div class="content">
       </div>

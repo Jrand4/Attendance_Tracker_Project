@@ -169,6 +169,7 @@
           </div>
 
           <button type="submit" class="btn btn-success">Submit</button>
+          ERROR - Invalid field entries
         </form>
       </div>
       <div class="sidetitle">

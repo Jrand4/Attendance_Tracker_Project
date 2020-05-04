@@ -5,6 +5,9 @@
  */
 package myBeans;
 
+import javax.mail.*;
+import javax.mail.internet.*;
+import javax.activation.*;
 import java.sql.*;
 
 public class DBConnect {
@@ -125,6 +128,45 @@ public class DBConnect {
       }
     }
     return count;
+  }
+
+  public void SendMail(String to) {
+    String from = "attendancetracker4400@gmail.com";//change accordingly ; 
+    String pass = "FS-395909";
+    java.util.Properties props = System.getProperties();
+    String host = "smtp.gmail.com";
+
+    props.put("mail.smtp.starttls.enable", "true");
+    props.put("mail.smtp.ssl.trust", host);
+    props.put("mail.smtp.user", from);
+    props.put("mail.smtp.password", pass);
+    props.put("mail.smtp.port", "587");
+    props.put("mail.smtp.auth", "true");
+    Session session = Session.getInstance(props, new javax.mail.Authenticator() {
+      protected PasswordAuthentication getPasswordAuthentication() {
+        return new PasswordAuthentication("attendancetracker4400@gmail.com", "FS-395909");
+      }
+    });
+
+    //compose the message  
+    try {
+      MimeMessage message = new MimeMessage(session);
+      message.setFrom(new InternetAddress(from));
+      message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
+      message.setSubject("Ping");
+      DBConnect dbConnect = new DBConnect();
+      String userName = getData("select userUserName from user where userEmailBackup = '" + to + "'");
+      String password = getData("select userPassword from user where userEmailBackup = '" + to + "'");
+      message.setText("Hello, here is your login information.  \nUserName:" + userName + "\nPassword:" + password + "\n");
+
+      // Send message  
+      Transport transport = session.getTransport("smtp");
+      transport.connect(host, 587, from, pass);
+      transport.sendMessage(message, null);
+      System.out.println("message sent successfully....");
+    } catch (MessagingException mex) {
+      mex.printStackTrace();
+    }
   }
 
   public int getLastNum(String sql) {
@@ -387,7 +429,8 @@ public class DBConnect {
 
     return getData("select student.studentID from user,student where user.userID = student.userID and student.userID = '" + userID + "'");
   }
-    public String getUserIDFromStudentID(String studentID) {
+
+  public String getUserIDFromStudentID(String studentID) {
 
     return getData("select user.userID from user,student where user.userID = student.userID and student.studentID = '" + studentID + "'");
   }
@@ -415,14 +458,14 @@ public class DBConnect {
             } else if (i == 1) {
               lastName = rst.getString(i + 1);
             } else if (i == 2) {
-              firstName += rst.getString(i + 1) + " \n";
+              firstName = rst.getString(i + 1) + " \n";
             }
           }
           absent = !wasPresentAtDay(studentID, courseID, date);
           if (!absent) {
             result += lastName + "," + firstName + "<a class=\"btn btn-info\" role=\"button\" href=\"addAbsence.jsp?courseID=" + courseID + "&studentID=" + studentID + "&date=" + date + "&destination=1\">Absent</a>\n</li>\n";
           } else {
-            result += lastName + "," + firstName + "[ABSENT] <a class=\"btn btn-warning\" role=\"button\" href=\"removeAbsence.jsp?courseID=" + courseID + "&studentID=" + studentID + "&date=" + date  + "&destination=1\">Excuse</a>\n</li>\n";
+            result += lastName + "," + firstName + "[ABSENT] <a class=\"btn btn-warning\" role=\"button\" href=\"removeAbsence.jsp?courseID=" + courseID + "&studentID=" + studentID + "&date=" + date + "&destination=1\">Excuse</a>\n</li>\n";
           }
         }
         result += "</ul>";
@@ -448,7 +491,7 @@ public class DBConnect {
         result += "<ul class=\"list-group\">";
         Date date = null;
         while (rst.next()) {
-          date = Date.valueOf(rst.getString(count+1));
+          date = Date.valueOf(rst.getString(count + 1));
           result += "<li class=\"list-group-item\"> " + date;
           result += "<a class=\"btn btn-warning\" role=\"button\" href=\"removeAbsence.jsp?courseID=" + courseID + "&studentID=" + studentID + "&date=" + date + "&destination=0\">Excuse</a>\n</li>\n";
         }
